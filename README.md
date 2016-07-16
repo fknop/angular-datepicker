@@ -10,6 +10,11 @@ This library is a fully Angular 2 datepicker.
 npm install angular-fk-datepicker
 ```
 
+## Todo
+
+* Integrate the new `@angular/forms` with `formControlName`.
+* Integrate the new `@angular/forms` with `ngModel`.
+
 ## Usage
 
 The library has two main component, the main one is obviously the datepicker itself. The second one is the input of the datepicker.
