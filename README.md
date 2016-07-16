@@ -14,6 +14,7 @@ npm install angular-fk-datepicker
 
 * Integrate the new `@angular/forms` with `formControlName`.
 * Integrate the new `@angular/forms` with `ngModel`.
+* Close datepicker when clicking away.
 
 ## Usage
 
