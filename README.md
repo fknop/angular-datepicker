@@ -5,7 +5,7 @@ This library is a fully Angular 2 datepicker.
 ## Install
 
 ```
-npm install angular-fk-datepicker`
+npm install angular-fk-datepicker
 ```
 
 ## Usage
