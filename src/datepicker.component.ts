@@ -20,6 +20,8 @@ import {
 
 import { DayComponent } from './day.component';
 
+
+// Styles inspired and modified from https://github.com/winmarkltd/BootstrapFormHelpers
 const DEFAULT_STYLES: string = `
     :host {
         position: absolute;

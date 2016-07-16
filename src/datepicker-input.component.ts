@@ -24,7 +24,6 @@ export class DatePickerInputComponent implements OnInit {
     @Input() formatter: DateFormatter;
     @Input() customClasses: string = 'form-control';
 
-
     constructor () {}
 
     toggle () {
