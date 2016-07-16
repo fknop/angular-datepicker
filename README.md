@@ -1,3 +1,5 @@
+[![NPM Version](https://img.shields.io/npm/v/angular-fk-datepicker.svg)](https://npmjs.com/package/angular-fk-datepicker)
+
 # angular-fk-datepicker
 
 This library is a fully Angular 2 datepicker. 
