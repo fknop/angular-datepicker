@@ -1,6 +1,6 @@
 {
   "name": "angular-fk-datepicker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Angular 2 datepicker",
   "main": "dist/index.js",
   "scripts": {
@@ -25,8 +25,11 @@
   },
   "keywords": [
     "angular",
+    "2",
     "angualrjs",
     "angular2",
+    "angular 2",
+    "date picker",
     "datepicker",
     "date",
     "picker"
