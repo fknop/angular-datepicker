@@ -52,7 +52,9 @@ export class DatePickerInputComponent implements OnInit, AfterContentInit, OnDes
         }
 
         this.subscription = this.datepicker.toggle.subscribe((open) => {
-            this.datepicker.closeOnClickAway = open;
+            setTimeout(() => {
+                this.datepicker.closeOnClickAway = open;
+            }, 0);
         });
     }
 
