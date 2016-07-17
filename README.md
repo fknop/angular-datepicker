@@ -4,6 +4,8 @@
 
 This library is a fully Angular 2 datepicker. 
 
+Click [here](http://plnkr.co/edit/ATA8TRRG95mVHof4yntb?p=preview) for a demo.
+
 ## Install
 
 ```
