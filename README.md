@@ -14,7 +14,6 @@ npm install angular-fk-datepicker
 
 * Integrate the new `@angular/forms` with `formControlName`.
 * Integrate the new `@angular/forms` with `ngModel`.
-* Close datepicker when clicking away.
 
 ## Usage
 
@@ -70,7 +69,8 @@ export class A {}
 
 #### Events
 
-* `selection`: Event fired when a new date is selected. The event is fired a first time when the datepicker is created.
+* `selection` (`Date`): Event fired when a new date is selected. The event is fired a first time when the datepicker is created.
+* `toggle` (`boolean`): Event fired when the datepicker is opened or closed. True if open, false if closed.
 
 ### DatePickerInputComponent
 
