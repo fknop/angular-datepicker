@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit, Input, Output, EventEmitter, HostBinding } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, Input, Output, HostListener, EventEmitter, HostBinding } from '@angular/core';
 import { 
     checkDate, 
     getDates, 
@@ -151,8 +151,22 @@ const TEMPLATE: string = `
 })
 export class DatePickerComponent implements OnInit {
     
-    @HostBinding('class.open') @Input() public open = false;
+    @HostBinding('class.open') @Input() private _open = false;
+
+    private hostEvent: any = null;
+    public closeOnClickAway: boolean = false;
+    @HostListener('click', ['$event']) private onClick (event: any) { this.hostEvent = event; }
+
+    @HostListener('document:click', ['$event'])
+    private onDocumentClick (event: any) {
+
+        if (this.closeOnClickAway && event !== this.hostEvent) {
+            this.close();
+        }
+    }
+
     @Output() selection: EventEmitter<Date> = new EventEmitter<Date>();
+    @Output() toggle: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     @Input() minDate: Date;
     @Input() maxDate: Date;
@@ -203,6 +217,27 @@ export class DatePickerComponent implements OnInit {
 
         this.setDate(this.initialDate || new Date());
         this.refreshView();
+    }
+
+    public isOpen () {
+
+        return this._open;
+    }
+
+    public open () {
+
+        if (!this._open) {
+            this._open = true;
+            this.toggle.emit(this._open);
+        }
+    }
+
+    public close () {
+
+        if (this._open) {
+            this._open = false;
+            this.toggle.emit(this._open);
+        }
     }
 
     private getDayLabel (index: number) {
