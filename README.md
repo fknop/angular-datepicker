@@ -68,6 +68,7 @@ export class A {}
 * `firstDayOfWeek` (`string`): The initial date selected by the datepicker. Default value is `su` (sunday).
 * `monthLabels` (`MonthLabels`): The labels for the months. Default values are the english months.
 * `dayLabels` (`DayLabels`): The labels for the days. Default values are the english days.
+* `useConfig` (`boolean`): Since 1.2.0, you can set it to false to ignore global configuration object.
 
 #### Events
 
@@ -136,6 +137,48 @@ export interface DayLabels {
     sa: string;
 }
 ```
+
+### Global configuration object
+
+It's possible since `1.2.0` to configure the datepicker with a global configuration object. 
+
+The configuration interface is FkDatepickerConfig:
+
+```typescript
+export interface FkDatepickerConfig {
+    minDate?: Date;
+    maxDate?: Date;
+    initialDate?: Date;
+    monthLabels?: MonthLabels;
+    dayLabels?: DayLabels;
+    firstDayOfWeek?: FirstDayOfWeek;
+}
+```
+
+Example:
+
+```typescript
+import { FK_DATEPICKER_CONFIG, fkDatepickerConfigProvider } from 'angular-fk-datepicker';
+
+//...
+
+@Component({
+    selector: 'my-component',
+    template: '...',
+    providers: [
+        fkDatepickerConfigProvider({
+            initialDate: new Date(2016, 08, 27) // All datepicker that do not override initialDate will have this one
+        })
+    ]
+})
+```
+
+How this works: 
+
+* If the value is passed by data-binding, it will override the configuration.
+* If `useConfig` is set to true (which is the default), the datepicker will look for the value in the configuration object.
+* If the value is absent, it will set the default, for example, date of day for `initialDate`.
+
 
 ## License
 
