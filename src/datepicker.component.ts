@@ -201,8 +201,12 @@ export class DatePickerComponent implements OnInit {
 
     ngOnInit () {
 
+        if (!(this.initialDate instanceof Date)) {
+            throw new Error('DatePickerComponent: initialDate must be an instance of Date');
+        }
+
         if (this.minDate && this.maxDate && this.maxDate < this.minDate) {
-            throw new Error('DatePicker: minDate cannot be smaller than maxDate');
+            throw new Error('DatePickerComponent: minDate cannot be smaller than maxDate');
         }
 
         if (!this.months) {
