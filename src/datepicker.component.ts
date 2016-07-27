@@ -1,4 +1,16 @@
-import { Component, ChangeDetectionStrategy, OnInit, Input, Output, HostListener, EventEmitter, HostBinding } from '@angular/core';
+import { 
+    ChangeDetectionStrategy, 
+    Component, 
+    EventEmitter, 
+    HostBinding,
+    HostListener, 
+    Inject,
+    Input,
+    OnInit, 
+    Optional,
+    Output
+} from '@angular/core';
+
 import { 
     checkDate, 
     getDates, 
@@ -17,6 +29,8 @@ import {
      FirstDayOfWeek, 
      MonthLabels
 } from './interfaces';
+
+import { FK_DATEPICKER_CONFIG, FkDatepickerConfig } from './config';
 
 import { DayComponent } from './day.component';
 
@@ -165,12 +179,14 @@ export class DatePickerComponent implements OnInit {
         }
     }
 
+
     @Output() selection: EventEmitter<Date> = new EventEmitter<Date>();
     @Output() toggle: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+    @Input() useConfig: boolean = true;
     @Input() minDate: Date;
     @Input() maxDate: Date;
-    @Input() initialDate: Date = new Date();
+    @Input() initialDate: Date;
 
     @Input() set monthLabels (labels: MonthLabels) {
 
@@ -182,7 +198,7 @@ export class DatePickerComponent implements OnInit {
         this.days = Object.keys(labels).map((key: string) => labels[key]);
     }
 
-    @Input() firstDayOfWeek: FirstDayOfWeek = 'su';
+    @Input() firstDayOfWeek: FirstDayOfWeek;
 
     private firstDayIndex: number;
     private days: string[];
@@ -197,9 +213,38 @@ export class DatePickerComponent implements OnInit {
         return this._activeDate;
     }
 
-    constructor (/* Future configuration object */) {}
+    constructor (@Optional() @Inject(FK_DATEPICKER_CONFIG) private config: FkDatepickerConfig) {}
 
-    ngOnInit () {
+    private initialize () {
+
+        if (this.useConfig) {
+
+            this.initialDate = this.initialDate || this.config.initialDate || new Date();
+            this.minDate = this.minDate || this.config.minDate;
+            this.maxDate = this.maxDate || this.config.maxDate;
+            this.firstDayOfWeek = this.firstDayOfWeek || this.config.firstDayOfWeek || 'su';
+
+            if (!this.months) {
+                this.monthLabels = this.config.monthLabels || defaultMonthLabels;
+            }
+
+            if (!this.days) {
+                this.dayLabels = this.config.dayLabels || defaultDayLabels;
+            }
+        }
+        else {
+
+            this.initialDate = this.initialDate || new Date();
+            this.firstDayOfWeek = this.firstDayOfWeek || 'su';
+
+            if (!this.months) {
+                this.monthLabels = defaultMonthLabels;
+            }
+
+            if (!this.days) {
+                this.dayLabels =  defaultDayLabels;
+            }
+        }
 
         if (!(this.initialDate instanceof Date)) {
             throw new Error('DatePickerComponent: initialDate must be an instance of Date');
@@ -208,14 +253,15 @@ export class DatePickerComponent implements OnInit {
         if (this.minDate && this.maxDate && this.maxDate < this.minDate) {
             throw new Error('DatePickerComponent: minDate cannot be smaller than maxDate');
         }
+    }
 
-        if (!this.months) {
-            this.monthLabels = defaultMonthLabels;
+    ngOnInit () {
+
+        if (!this.config) {
+            this.useConfig = false;
         }
 
-        if (!this.days) {
-            this.dayLabels = defaultDayLabels;
-        }
+        this.initialize();
 
         this.firstDayIndex = getFirstDayOfWeekIndex(this.firstDayOfWeek);
 

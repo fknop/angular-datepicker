@@ -13,8 +13,7 @@ import { Self, Optional } from '@angular/core';
                readonly="true"
                type="text" 
                [style.background-color]="'inherit'"
-               [value]="formatter.format(datepicker.activeDate)">
-
+               [value]="formatter.format(datepicker.activeDate)" />
         <ng-content></ng-content>
     `
 })
