@@ -217,6 +217,7 @@ export class DatePickerComponent implements OnInit {
 
         this.setDate(this.initialDate || new Date());
         this.refreshView();
+        this.emitToggle();
     }
 
     public isOpen () {
@@ -228,7 +229,7 @@ export class DatePickerComponent implements OnInit {
 
         if (!this._open) {
             this._open = true;
-            this.toggle.emit(this._open);
+            this.emitToggle();
         }
     }
 
@@ -236,7 +237,7 @@ export class DatePickerComponent implements OnInit {
 
         if (this._open) {
             this._open = false;
-            this.toggle.emit(this._open);
+            this.emitToggle();
         }
     }
 
@@ -372,7 +373,11 @@ export class DatePickerComponent implements OnInit {
     private updateValue () {
 
         // May update a FormControl later...
-        
         this.selection.emit(this.activeDate);
+    }
+
+    private emitToggle () {
+
+        this.toggle.emit(this._open);
     }
 }
