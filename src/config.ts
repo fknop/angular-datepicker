@@ -11,6 +11,7 @@ export interface FkDatepickerConfig {
     monthLabels?: MonthLabels;
     dayLabels?: DayLabels;
     firstDayOfWeek?: FirstDayOfWeek;
+    customClasses?: any; // TODO - change to interface
 }
 
 

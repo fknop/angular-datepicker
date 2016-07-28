@@ -2,14 +2,18 @@ import {
     ChangeDetectionStrategy, 
     Component, 
     EventEmitter, 
+    Host,
     HostBinding,
     HostListener, 
     Inject,
     Input,
     OnInit, 
     Optional,
-    Output
+    Output,
+    Self
 } from '@angular/core';
+
+import { FormControlName, FormGroupDirective } from '@angular/forms';
 
 import { 
     checkDate, 
@@ -35,8 +39,32 @@ import { FK_DATEPICKER_CONFIG, FkDatepickerConfig } from './config';
 import { DayComponent } from './day.component';
 
 
+interface DatepickerClasses {
+    useDefault?: boolean;
+    table?: string;
+    headerRow?: string;
+    dayLabelsRow?: string;
+    month?: string;
+    year?: string;
+    previousIcon?: string;
+    nextIcon?: string;
+    row?: string;
+    day?: string;
+}
+
+const defaultClasses: DatepickerClasses = {
+    table: 'calendar',
+    previousIcon: 'glyphicon glyphicon-chevron-left',
+    nextIcon: 'glyphicon glyphicon-chevron-right',
+    headerRow: 'months-header',
+    dayLabelsRow: 'days-header',
+    month: 'month',
+    year: 'year'
+}
+
+
 // Styles inspired and modified from https://github.com/winmarkltd/BootstrapFormHelpers
-const DEFAULT_STYLES: string = `
+const BS3_STYLES: string = `
     :host {
         position: absolute;
         z-index: 1000;
@@ -108,41 +136,42 @@ const DEFAULT_STYLES: string = `
 `;
 
 const TEMPLATE: string = `
-    <table class="table calendar table-bordered">
+    <table class="table table-bordered" [ngClass]="customClasses.table">
         <thead> 
-            <tr class="months-header"> 
-                <th class="month" colspan="4"> 
+            <tr [ngClass]="customClasses.headerRow"> 
+                <th [ngClass]="customClasses.month" colspan="4"> 
                     <a class="previous" (click)="moveMonth(-1)">
-                        <i class="glyphicon glyphicon-chevron-left"></i>
+                        <i [ngClass]="customClasses.previousIcon"></i>
                     </a> 
                     <span>
                         {{ months[activeDate.getMonth()] }}
                     </span> 
                     <a class="next" (click)="moveMonth(1)">
-                        <i class="glyphicon glyphicon-chevron-right"></i>
+                        <i [ngClass]="customClasses.nextIcon"></i>
                     </a> 
                 </th> 
-                <th class="year" colspan="3"> 
+                <th [ngClass]="customClasses.year" colspan="3"> 
                     <a class="previous" (click)="moveYear(-1)">
-                        <i class="glyphicon glyphicon-chevron-left"></i>
+                        <i [ngClass]="customClasses.previousIcon"></i>
                     </a> 
                     <span>
                         {{ activeDate.getFullYear() }}
                     </span> 
                     <a class="next" (click)="moveYear(1)">
-                        <i class="glyphicon glyphicon-chevron-right"></i>
+                        <i [ngClass]="customClasses.nextIcon"></i>
                     </a> 
                 </th> 
             </tr> 
-            <tr class="days-header"> 
+            <tr [ngClass]="customClasses.dayLabelsRow"> 
                 <th *ngFor="let day of [0, 1, 2, 3, 4, 5, 6]">
                     {{ getDayLabel(day) }}
                 </th>
             </tr> 
         </thead> 
         <tbody>
-            <tr *ngFor="let row of rows; let rowIndex = index;">
-                <td *ngFor="let col of row let colIndex = index;"
+            <tr *ngFor="let row of rows; let rowIndex = index;" [ngClass]="customClasses.row">
+                <td *ngFor="let col of row let colIndex = index;" 
+                        [ngClass]="customClasses.day"
                         [class.selected]="col.selected"
                         [class.off]="col.off"
                         (click)="selectDate(col.date, rowIndex, colIndex)">
@@ -159,7 +188,7 @@ const TEMPLATE: string = `
 @Component({
     selector: 'fk-datepicker',
     template: TEMPLATE,
-    styles: [DEFAULT_STYLES],
+    styles: [BS3_STYLES],
     directives: [DayComponent],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -183,6 +212,7 @@ export class DatePickerComponent implements OnInit {
     @Output() selection: EventEmitter<Date> = new EventEmitter<Date>();
     @Output() toggle: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+    @Input() customClasses: DatepickerClasses;
     @Input() useConfig: boolean = true;
     @Input() minDate: Date;
     @Input() maxDate: Date;
@@ -213,9 +243,26 @@ export class DatePickerComponent implements OnInit {
         return this._activeDate;
     }
 
-    constructor (@Optional() @Inject(FK_DATEPICKER_CONFIG) private config: FkDatepickerConfig) {}
+    constructor (
+        @Optional() @Inject(FK_DATEPICKER_CONFIG) private config: FkDatepickerConfig,
+        @Optional() @Self() private controlName: FormControlName) {}
+
+   
+
+    get control () {
+
+        if (!this.controlName) {
+            return null;
+        }
+
+        return this.controlName.control;
+    }
 
     private initialize () {
+
+        if (this.hasFormControl() && (this.control.value instanceof Date)) {
+            this.initialDate = this.control.value;
+        }
 
         if (this.useConfig) {
 
@@ -223,6 +270,7 @@ export class DatePickerComponent implements OnInit {
             this.minDate = this.minDate || this.config.minDate;
             this.maxDate = this.maxDate || this.config.maxDate;
             this.firstDayOfWeek = this.firstDayOfWeek || this.config.firstDayOfWeek || 'su';
+            this.customClasses = this.customClasses || this.config.customClasses || defaultClasses;
 
             if (!this.months) {
                 this.monthLabels = this.config.monthLabels || defaultMonthLabels;
@@ -236,6 +284,8 @@ export class DatePickerComponent implements OnInit {
 
             this.initialDate = this.initialDate || new Date();
             this.firstDayOfWeek = this.firstDayOfWeek || 'su';
+            this.customClasses = this.customClasses || defaultClasses;
+            
 
             if (!this.months) {
                 this.monthLabels = defaultMonthLabels;
@@ -288,7 +338,16 @@ export class DatePickerComponent implements OnInit {
         if (this._open) {
             this._open = false;
             this.emitToggle();
+
+            if (this.hasFormControl()) {
+                this.control.markAsTouched();
+            }
         }
+    }
+
+    private hasFormControl () {
+
+        return this.controlName && this.controlName.control;
     }
 
     private getDayLabel (index: number) {
@@ -424,10 +483,20 @@ export class DatePickerComponent implements OnInit {
 
         // May update a FormControl later...
         this.selection.emit(this.activeDate);
+
+        if (this.hasFormControl()) {
+            this.control.updateValue(this.activeDate);
+
+            if (!sameDate(this.initialDate, this.activeDate)) {
+                this.control.markAsDirty();
+            }
+        }
     }
 
     private emitToggle () {
 
         this.toggle.emit(this._open);
     }
+
+    
 }
