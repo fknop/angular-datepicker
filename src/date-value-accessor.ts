@@ -7,6 +7,9 @@ export const DATE_VALUE_ACCESSOR: any = {
   multi: true
 };
 
+/* 
+ * Value accessor for fk-datepicker 
+ */
 @Directive({
   selector: 'fk-datepicker[formControlName]',
   providers: [DATE_VALUE_ACCESSOR]

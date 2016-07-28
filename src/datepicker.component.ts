@@ -13,7 +13,7 @@ import {
     Self
 } from '@angular/core';
 
-import { FormControlName, FormGroupDirective } from '@angular/forms';
+import { FormControlName, FormGroupDirective, NgModel } from '@angular/forms';
 
 import { 
     checkDate, 
@@ -186,7 +186,7 @@ const TEMPLATE: string = `
 
 
 @Component({
-    selector: 'fk-datepicker',
+    selector: 'fk-datepicker,fk-datepicker[formControlName],fk-datepicker[ngModel]',
     template: TEMPLATE,
     styles: [BS3_STYLES],
     directives: [DayComponent],
@@ -197,13 +197,13 @@ export class DatePickerComponent implements OnInit {
     @HostBinding('class.open') @Input() private _open = false;
 
     private hostEvent: any = null;
-    public closeOnClickAway: boolean = false;
+    public _closeOnClickAway: boolean = false;
     @HostListener('click', ['$event']) private onClick (event: any) { this.hostEvent = event; }
 
     @HostListener('document:click', ['$event'])
     private onDocumentClick (event: any) {
 
-        if (this.closeOnClickAway && event !== this.hostEvent) {
+        if (this._closeOnClickAway && event !== this.hostEvent) {
             this.close();
         }
     }
@@ -212,6 +212,7 @@ export class DatePickerComponent implements OnInit {
     @Output() selection: EventEmitter<Date> = new EventEmitter<Date>();
     @Output() toggle: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+    @Input() closeOnClickAway: boolean = true;
     @Input() customClasses: DatepickerClasses;
     @Input() useConfig: boolean = true;
     @Input() minDate: Date;
@@ -245,7 +246,12 @@ export class DatePickerComponent implements OnInit {
 
     constructor (
         @Optional() @Inject(FK_DATEPICKER_CONFIG) private config: FkDatepickerConfig,
-        @Optional() @Self() private controlName: FormControlName) {}
+        @Optional() @Self() private controlName: FormControlName,
+        @Optional() @Self() private cd: NgModel) {
+            if (cd && controlName) {
+                throw new Error('DatePickerComponent: Cannot have ngModel and formControlName on the same control');
+            }
+        }
 
    
 
@@ -327,9 +333,16 @@ export class DatePickerComponent implements OnInit {
 
     public open () {
 
+        this._closeOnClickAway = false;
         if (!this._open) {
             this._open = true;
             this.emitToggle();
+
+            if (this.closeOnClickAway) {
+                setTimeout(() => {
+                    this._closeOnClickAway = this._open;
+                }, 0);
+            }
         }
     }
 
@@ -338,6 +351,12 @@ export class DatePickerComponent implements OnInit {
         if (this._open) {
             this._open = false;
             this.emitToggle();
+
+            if (this.closeOnClickAway) {
+                setTimeout(() => {
+                    this._closeOnClickAway = this._open;
+                }, 0);
+            }
 
             if (this.hasFormControl()) {
                 this.control.markAsTouched();
@@ -483,6 +502,10 @@ export class DatePickerComponent implements OnInit {
 
         // May update a FormControl later...
         this.selection.emit(this.activeDate);
+
+        if (this.cd) {
+            this.cd.viewToModelUpdate(this.activeDate);
+        }
 
         if (this.hasFormControl()) {
             this.control.updateValue(this.activeDate);

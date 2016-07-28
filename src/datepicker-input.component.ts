@@ -24,8 +24,6 @@ export class DatePickerInputComponent implements OnInit, AfterContentInit, OnDes
     @Input() formatter: DateFormatter;
     @Input() customClasses: string = 'form-control';
 
-    private subscription: any;
-
     constructor () {}
 
     toggle () {
@@ -34,7 +32,6 @@ export class DatePickerInputComponent implements OnInit, AfterContentInit, OnDes
             this.datepicker.close();
         }
         else {
-            this.datepicker.closeOnClickAway = false; // Make sure if the user sets it to true.
             this.datepicker.open();
         }
     }
@@ -50,16 +47,8 @@ export class DatePickerInputComponent implements OnInit, AfterContentInit, OnDes
             throw new Error('DatePickerComponent not projected into DatePickerInputComponent');
         }
 
-        this.subscription = this.datepicker.toggle.subscribe((open) => {
-            setTimeout(() => {
-                this.datepicker.closeOnClickAway = open;
-            }, 0);
-        });
     }
 
-    ngOnDestroy () {
-
-        this.subscription.unsubscribe();
-    }
+    ngOnDestroy () {}
 
 }
