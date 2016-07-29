@@ -12,7 +12,6 @@ import {
     Output,
     Self
 } from '@angular/core';
-
 import { FormControlName, FormGroupDirective, NgModel } from '@angular/forms';
 
 import { 
@@ -35,19 +34,28 @@ import {
      MonthLabels,
      mergeCustomClasses
 } from './interfaces';
-
 import { FK_DATEPICKER_CONFIG, FkDatepickerConfig } from './config';
-
 import { DayComponent } from './day.component';
 
 // Styles inspired and modified from https://github.com/winmarkltd/BootstrapFormHelpers
 const BS3_STYLES: string = `
+
     :host {
         position: absolute;
         z-index: 1000;
         display: none;
         float: left;
         min-width: 296px;
+    }
+
+    :host.open > .datepicker, :host.open {
+        display: block;
+    }
+
+    :host > table > tbody > tr > td.off {
+        color: #999999;
+        pointer-events: none !important;
+        cursor: default;
     }
 
     :host > table.calendar {
@@ -94,12 +102,7 @@ const BS3_STYLES: string = `
         pointer-events: none;
     }
 
-    :host > table > tbody > tr > td.off {
-        color: #999999;
-        pointer-events: none !important;
-        cursor: default;
-    }
-
+    
     :host > table.calendar > tbody > tr > td:not(.off):not(.selected):hover {
         color: #262626;
         cursor: pointer;
@@ -107,9 +110,7 @@ const BS3_STYLES: string = `
     }
 
 
-    :host.open > .datepicker, :host.open {
-        display: block;
-    }
+    
 `;
 
 const TEMPLATE: string = `
@@ -151,7 +152,7 @@ const TEMPLATE: string = `
                         [ngClass]="customClasses.day"
                         [class.selected]="col.selected"
                         [class.off]="col.off"
-                        (click)="selectDate(col.date, rowIndex, colIndex)">
+                        (click)="selectDateFromTemplate(col, rowIndex, colIndex)">
                     <span>
                         <fk-day [date]="col"></fk-day>
                     </span>
@@ -399,6 +400,15 @@ export class DatePickerComponent implements OnInit {
         }
 
         return nextDate;
+    }
+
+    private selectDateFromTemplate (dm: DateModel, i: number, j: number) {
+
+        if (dm.off || dm.selected) {
+            return;
+        }
+
+        this.selectDate(dm.date, i, j);
     }
 
     // Select date and change the current index if necessary
