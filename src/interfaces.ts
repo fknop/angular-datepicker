@@ -63,3 +63,35 @@ export const defaultMonthLabels: MonthLabels = {
     11: 'November',
     12: 'December'
 };
+
+export interface DatePickerCustomClasses {
+    mergeWithDefaults?: boolean;
+    table?: string;
+    headerRow?: string;
+    dayLabelsRow?: string;
+    month?: string;
+    year?: string;
+    previousIcon?: string;
+    nextIcon?: string;
+    row?: string;
+    day?: string;
+}
+
+export const defaultClasses: DatePickerCustomClasses = {
+    table: 'calendar',
+    previousIcon: 'glyphicon glyphicon-chevron-left',
+    nextIcon: 'glyphicon glyphicon-chevron-right',
+    headerRow: 'months-header',
+    dayLabelsRow: 'days-header',
+    month: 'month',
+    year: 'year'
+};
+
+export function mergeCustomClasses (classes: DatePickerCustomClasses) {
+
+    if (!classes) {
+        return defaultClasses;
+    }
+
+    return classes.mergeWithDefaults ? Object.assign({}, defaultClasses, classes) : classes;
+}

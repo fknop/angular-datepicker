@@ -27,41 +27,18 @@ import {
 
 import { DateModel } from './date-model';
 import {
+     DatePickerCustomClasses,
      DayLabels, 
      defaultDayLabels, 
      defaultMonthLabels,
      FirstDayOfWeek, 
-     MonthLabels
+     MonthLabels,
+     mergeCustomClasses
 } from './interfaces';
 
 import { FK_DATEPICKER_CONFIG, FkDatepickerConfig } from './config';
 
 import { DayComponent } from './day.component';
-
-
-interface DatepickerClasses {
-    useDefault?: boolean;
-    table?: string;
-    headerRow?: string;
-    dayLabelsRow?: string;
-    month?: string;
-    year?: string;
-    previousIcon?: string;
-    nextIcon?: string;
-    row?: string;
-    day?: string;
-}
-
-const defaultClasses: DatepickerClasses = {
-    table: 'calendar',
-    previousIcon: 'glyphicon glyphicon-chevron-left',
-    nextIcon: 'glyphicon glyphicon-chevron-right',
-    headerRow: 'months-header',
-    dayLabelsRow: 'days-header',
-    month: 'month',
-    year: 'year'
-}
-
 
 // Styles inspired and modified from https://github.com/winmarkltd/BootstrapFormHelpers
 const BS3_STYLES: string = `
@@ -117,9 +94,9 @@ const BS3_STYLES: string = `
         pointer-events: none;
     }
 
-    :host > table.calendar > tbody > tr > td.off {
+    :host > table > tbody > tr > td.off {
         color: #999999;
-        pointer-events: none;
+        pointer-events: none !important;
         cursor: default;
     }
 
@@ -186,7 +163,8 @@ const TEMPLATE: string = `
 
 
 @Component({
-    selector: 'fk-datepicker,fk-datepicker[formControlName],fk-datepicker[ngModel]',
+    selector: 'fk-datepicker,fk-datepicker[formControlName]',
+    // selector: 'fk-datepicker,fk-datepicker[formControlName],fk-datepicker[ngModel]',
     template: TEMPLATE,
     styles: [BS3_STYLES],
     directives: [DayComponent],
@@ -213,7 +191,7 @@ export class DatePickerComponent implements OnInit {
     @Output() toggle: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     @Input() closeOnClickAway: boolean = true;
-    @Input() customClasses: DatepickerClasses;
+    @Input() customClasses: DatePickerCustomClasses;
     @Input() useConfig: boolean = true;
     @Input() minDate: Date;
     @Input() maxDate: Date;
@@ -248,12 +226,11 @@ export class DatePickerComponent implements OnInit {
         @Optional() @Inject(FK_DATEPICKER_CONFIG) private config: FkDatepickerConfig,
         @Optional() @Self() private controlName: FormControlName,
         @Optional() @Self() private cd: NgModel) {
-            if (cd && controlName) {
-                throw new Error('DatePickerComponent: Cannot have ngModel and formControlName on the same control');
-            }
+        
+        if (this.cd && this.controlName) {
+            throw new Error('DatePickerComponent: Cannot have ngModel and formControlName on the same control');
         }
-
-   
+    }
 
     get control () {
 
@@ -270,13 +247,17 @@ export class DatePickerComponent implements OnInit {
             this.initialDate = this.control.value;
         }
 
+        if (this.cd && (this.cd.value instanceof Date)) {
+            this.initialDate = this.cd.value;
+        }
+
         if (this.useConfig) {
 
             this.initialDate = this.initialDate || this.config.initialDate || new Date();
             this.minDate = this.minDate || this.config.minDate;
             this.maxDate = this.maxDate || this.config.maxDate;
             this.firstDayOfWeek = this.firstDayOfWeek || this.config.firstDayOfWeek || 'su';
-            this.customClasses = this.customClasses || this.config.customClasses || defaultClasses;
+            this.customClasses = mergeCustomClasses(this.customClasses || this.config.customClasses);
 
             if (!this.months) {
                 this.monthLabels = this.config.monthLabels || defaultMonthLabels;
@@ -290,9 +271,8 @@ export class DatePickerComponent implements OnInit {
 
             this.initialDate = this.initialDate || new Date();
             this.firstDayOfWeek = this.firstDayOfWeek || 'su';
-            this.customClasses = this.customClasses || defaultClasses;
+            this.customClasses = mergeCustomClasses(this.customClasses);
             
-
             if (!this.months) {
                 this.monthLabels = defaultMonthLabels;
             }
@@ -339,6 +319,7 @@ export class DatePickerComponent implements OnInit {
             this.emitToggle();
 
             if (this.closeOnClickAway) {
+                // Wraps this on a setTimeout or it will never open
                 setTimeout(() => {
                     this._closeOnClickAway = this._open;
                 }, 0);
@@ -353,6 +334,7 @@ export class DatePickerComponent implements OnInit {
             this.emitToggle();
 
             if (this.closeOnClickAway) {
+                // No need for setTimeout ? 
                 setTimeout(() => {
                     this._closeOnClickAway = this._open;
                 }, 0);
