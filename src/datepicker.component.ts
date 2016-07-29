@@ -55,7 +55,7 @@ const BS3_STYLES: string = `
     :host > table > tbody > tr > td.off {
         color: #999999;
         pointer-events: none !important;
-        cursor: default;
+        cursor: default !important;
     }
 
     :host > table.calendar {
@@ -108,9 +108,6 @@ const BS3_STYLES: string = `
         cursor: pointer;
         background-color: #f5f5f5;
     }
-
-
-    
 `;
 
 const TEMPLATE: string = `
@@ -147,9 +144,8 @@ const TEMPLATE: string = `
             </tr> 
         </thead> 
         <tbody>
-            <tr *ngFor="let row of rows; let rowIndex = index;" [ngClass]="customClasses.row">
-                <td *ngFor="let col of row let colIndex = index;" 
-                        [ngClass]="customClasses.day"
+            <tr *ngFor="let row of rows; let rowIndex = index;">
+                <td *ngFor="let col of row let colIndex = index;"
                         [class.selected]="col.selected"
                         [class.off]="col.off"
                         (click)="selectDateFromTemplate(col, rowIndex, colIndex)">
@@ -173,11 +169,12 @@ const TEMPLATE: string = `
 })
 export class DatePickerComponent implements OnInit {
     
-    @HostBinding('class.open') @Input() private _open = false;
+    @HostBinding('class.open') 
+    @Input() private _open = false;
 
     private hostEvent: any = null;
-    public _closeOnClickAway: boolean = false;
-    @HostListener('click', ['$event']) private onClick (event: any) { this.hostEvent = event; }
+    @HostListener('click', ['$event']) 
+    private onClick (event: any) { this.hostEvent = event; }
 
     @HostListener('document:click', ['$event'])
     private onDocumentClick (event: any) {
@@ -187,10 +184,10 @@ export class DatePickerComponent implements OnInit {
         }
     }
 
-
     @Output() selection: EventEmitter<Date> = new EventEmitter<Date>();
     @Output() toggle: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+    private _closeOnClickAway: boolean = false;
     @Input() closeOnClickAway: boolean = true;
     @Input() customClasses: DatePickerCustomClasses;
     @Input() useConfig: boolean = true;
@@ -218,15 +215,13 @@ export class DatePickerComponent implements OnInit {
     private currentIndex: {i: number, j: number} = null;
 
     private _activeDate: Date;
-    get activeDate (): Date {
-
-        return this._activeDate;
-    }
+    get activeDate (): Date { return this._activeDate; }
 
     constructor (
         @Optional() @Inject(FK_DATEPICKER_CONFIG) private config: FkDatepickerConfig,
         @Optional() @Self() private controlName: FormControlName,
-        @Optional() @Self() private cd: NgModel) {
+        @Optional() @Self() private cd: NgModel
+    ) {
         
         if (this.cd && this.controlName) {
             throw new Error('DatePickerComponent: Cannot have ngModel and formControlName on the same control');
@@ -286,7 +281,7 @@ export class DatePickerComponent implements OnInit {
         if (!(this.initialDate instanceof Date)) {
             throw new Error('DatePickerComponent: initialDate must be an instance of Date');
         }
-
+        
         if (this.minDate && this.maxDate && this.maxDate < this.minDate) {
             throw new Error('DatePickerComponent: minDate cannot be smaller than maxDate');
         }
@@ -321,9 +316,7 @@ export class DatePickerComponent implements OnInit {
 
             if (this.closeOnClickAway) {
                 // Wraps this on a setTimeout or it will never open
-                setTimeout(() => {
-                    this._closeOnClickAway = this._open;
-                }, 0);
+                setTimeout(() => this._closeOnClickAway = this._open, 0);
             }
         }
     }
@@ -334,37 +327,18 @@ export class DatePickerComponent implements OnInit {
             this._open = false;
             this.emitToggle();
 
-            if (this.closeOnClickAway) {
-                // No need for setTimeout ? 
-                setTimeout(() => {
-                    this._closeOnClickAway = this._open;
-                }, 0);
-            }
-
+            // Mark as touched when it's closed
             if (this.hasFormControl()) {
                 this.control.markAsTouched();
             }
         }
     }
 
-    private hasFormControl () {
-
-        return this.controlName && this.controlName.control;
-    }
-
-    private getDayLabel (index: number) {
-
-        return this.days[(this.firstDayIndex + index) % 7];
-    }
+    private hasFormControl () { return this.controlName && this.controlName.control; }
+    private getDayLabel (index: number) { return this.days[(this.firstDayIndex + index) % 7]; }
 
     // Sets the current index of the selected day to retrieve it later
-    private setCurrentIndex (i: number, j: number) {
-
-        this.currentIndex = {
-            i: i,
-            j: j
-        };
-    }
+    private setCurrentIndex (i: number, j: number) { this.currentIndex = { i, j }; }
 
     // The setSelected method clones a day to rerender it.
     private setSelected (i: number, j: number, value: boolean) {
@@ -402,6 +376,7 @@ export class DatePickerComponent implements OnInit {
         return nextDate;
     }
 
+    // selectDate on click, it prevents selecting date if the day is off or selected
     private selectDateFromTemplate (dm: DateModel, i: number, j: number) {
 
         if (dm.off || dm.selected) {
@@ -492,11 +467,14 @@ export class DatePickerComponent implements OnInit {
 
     private updateValue () {
 
-        // May update a FormControl later...
         this.selection.emit(this.activeDate);
 
         if (this.cd) {
             this.cd.viewToModelUpdate(this.activeDate);
+
+            if (!sameDate(this.initialDate, this.activeDate)) {
+                this.cd.control.markAsDirty();
+            }
         }
 
         if (this.hasFormControl()) {
@@ -508,10 +486,5 @@ export class DatePickerComponent implements OnInit {
         }
     }
 
-    private emitToggle () {
-
-        this.toggle.emit(this._open);
-    }
-
-    
+    private emitToggle () { this.toggle.emit(this._open); }
 }

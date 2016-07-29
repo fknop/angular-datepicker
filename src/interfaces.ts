@@ -73,8 +73,6 @@ export interface DatePickerCustomClasses {
     year?: string;
     previousIcon?: string;
     nextIcon?: string;
-    row?: string;
-    day?: string;
 }
 
 export const defaultClasses: DatePickerCustomClasses = {
