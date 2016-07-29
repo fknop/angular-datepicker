@@ -27,8 +27,7 @@ For example, you can pass your own formatter which uses `moment` for advanced fo
 
 **A word on styling**
 
-For now by default the style uses `Bootstrap 3`. In the future, it will support custom classes/styles that can be applied to every
-part of the datepicker.
+By default the style uses `Bootstrap 3`. It supports basic custom classes to apply custom styles. See **DatePickerCustomClasses**.
 
 ```typescript
 import { Component } from '@angular/core';
@@ -115,6 +114,8 @@ export const defaultClasses: DatePickerCustomClasses = {
 ```
 
 If you set `mergeWithDefaults` to true, it will override the defaults, otherwise it will not take any default values.
+If you change the table class, don't forget to add the styles for the `selected` day, etc. See the default styles in the 
+['datepicker.component.ts`](./src/datepicker.component.ts) file.
 
 
 ### DatePickerInputComponent
