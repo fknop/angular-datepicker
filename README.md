@@ -115,7 +115,7 @@ export const defaultClasses: DatePickerCustomClasses = {
 
 If you set `mergeWithDefaults` to true, it will override the defaults, otherwise it will not take any default values.
 If you change the table class, don't forget to add the styles for the `selected` day, etc. See the default styles in the 
-['datepicker.component.ts`](./src/datepicker.component.ts) file.
+[datepicker.component.ts](./src/datepicker.component.ts) file.
 
 
 ### DatePickerInputComponent
