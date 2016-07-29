@@ -22,7 +22,7 @@ import {
     sameDate,
     sameMonthAndYear,
     split
-} from './facade';
+} from './shared';
 
 import { DateModel } from './date-model';
 import {

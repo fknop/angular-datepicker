@@ -11,10 +11,7 @@ export function createDate (year: number, month: number, day: number) {
     return getRealDate(new Date(year, month, day));
 }
 
-export function getDayOfWeek (date: Date) {
-
-    return date.getDay();
-}
+export function getDayOfWeek (date: Date) { return date.getDay(); }
 
 export function getFirstDayOfMonth (date: Date) {
 
@@ -75,6 +72,7 @@ export function getFirstDayOfWeekIndex (firstDayOfWeek: string) {
     }
 }
 
+// Returns an array of dates and the index of the selected date in this array
 export function getDates (date: Date, { count = 42, minDate, maxDate, firstDayOfWeek = 'su' }: {
     count: number,
     minDate?: Date, 
@@ -97,7 +95,7 @@ export function getDates (date: Date, { count = 42, minDate, maxDate, firstDayOf
 
     for (let i = offset; i < (count + offset); ++i) {
         const d = createDate(year, month, 1 + i);
-        const isCurrent = sameDate(date, d);
+        const isCurrent = !selectedIndex && sameDate(date, d);
 
         if (isCurrent) {
             selectedIndex = i - offset;
