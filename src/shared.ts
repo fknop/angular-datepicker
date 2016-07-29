@@ -95,8 +95,9 @@ export function getDates (date: Date, { count = 42, minDate, maxDate, firstDayOf
 
     for (let i = offset; i < (count + offset); ++i) {
         const d = createDate(year, month, 1 + i);
-        const isCurrent = !selectedIndex && sameDate(date, d);
 
+        // Shorticrcuit with !selectedIndex, when the index has already been found, no need to test it
+        const isCurrent = !selectedIndex && sameDate(date, d);
         if (isCurrent) {
             selectedIndex = i - offset;
         }

@@ -1,6 +1,6 @@
 import { Component, Input, Output, 
-        OnInit, ContentChild,
-        AfterContentInit, OnDestroy } from '@angular/core';
+         OnInit, ContentChild,
+         AfterContentInit } from '@angular/core';
 import { DateFormatter, DefaultDateFormatter } from './interfaces';
 import { DatePickerComponent } from './datepicker.component';
 import { Self, Optional } from '@angular/core';
@@ -17,14 +17,12 @@ import { Self, Optional } from '@angular/core';
         <ng-content></ng-content>
     `
 })
-export class DatePickerInputComponent implements OnInit, AfterContentInit, OnDestroy {
+export class DatePickerInputComponent implements OnInit, AfterContentInit {
 
     @ContentChild(DatePickerComponent) datepicker: DatePickerComponent;
 
     @Input() formatter: DateFormatter;
     @Input() customClasses: string = 'form-control';
-
-    constructor () {}
 
     toggle () {
         
@@ -48,7 +46,4 @@ export class DatePickerInputComponent implements OnInit, AfterContentInit, OnDes
         }
 
     }
-
-    ngOnDestroy () {}
-
 }

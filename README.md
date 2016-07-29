@@ -14,7 +14,6 @@ npm install angular-fk-datepicker
 
 ## Todo
 
-* Integrate the new `@angular/forms` with `formControlName`.
 * Integrate the new `@angular/forms` with `ngModel`.
 
 ## Usage
@@ -68,12 +67,55 @@ export class A {}
 * `firstDayOfWeek` (`string`): The initial date selected by the datepicker. Default value is `su` (sunday).
 * `monthLabels` (`MonthLabels`): The labels for the months. Default values are the english months.
 * `dayLabels` (`DayLabels`): The labels for the days. Default values are the english days.
+* `customClasses` (`DatePickerCustomClasses`): Custom classes for the datepicker elements. See defaults below.
+* `closeOnClickAway` (`boolean`): Close the datepicker when clicking away. Default is true.
 * `useConfig` (`boolean`): Since 1.2.0, you can set it to false to ignore global configuration object.
 
 #### Events
 
 * `selection` (`Date`): Event fired when a new date is selected. The event is fired a first time when the datepicker is created.
 * `toggle` (`boolean`): Event fired when the datepicker is opened or closed. True if open, false if closed.
+
+#### FormControlName
+
+The datepicker supports the `formControlName` directive. Just set `formControlName` with the name of your 
+control like any other control. If a value is already present in the control, it will set it as initial value.
+When the value is updated the control is also updated and set to dirty. It is set to `touched` as soon as the datepicker
+is closed.
+
+#### DatePickerCustomClasses
+
+The interface for the custom classes is:
+
+```typescript
+export interface DatePickerCustomClasses {
+    mergeWithDefaults?: boolean;
+    table?: string;
+    headerRow?: string;
+    dayLabelsRow?: string;
+    month?: string;
+    year?: string;
+    previousIcon?: string;
+    nextIcon?: string;
+}
+```
+
+The defaults are:
+
+```typescript
+export const defaultClasses: DatePickerCustomClasses = {
+    table: 'calendar',
+    previousIcon: 'glyphicon glyphicon-chevron-left',
+    nextIcon: 'glyphicon glyphicon-chevron-right',
+    headerRow: 'months-header',
+    dayLabelsRow: 'days-header',
+    month: 'month',
+    year: 'year'
+};
+```
+
+If you set `mergeWithDefaults` to true, it will override the defaults, otherwise it will not take any default values.
+
 
 ### DatePickerInputComponent
 
