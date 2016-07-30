@@ -195,6 +195,7 @@ export interface FkDatePickerConfig {
     monthLabels?: MonthLabels;
     dayLabels?: DayLabels;
     firstDayOfWeek?: FirstDayOfWeek;
+    formatter: DateFormatter; // Since 1.3.2
 }
 ```
 
