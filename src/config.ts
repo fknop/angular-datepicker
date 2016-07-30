@@ -4,7 +4,7 @@ import { MonthLabels, DayLabels, FirstDayOfWeek } from './interfaces';
 
 export const FK_DATEPICKER_CONFIG = new OpaqueToken('angular-fk-datepicker');
 
-export interface FkDatepickerConfig {
+export interface FkDatePickerConfig {
     minDate?: Date;
     maxDate?: Date;
     initialDate?: Date;
@@ -15,7 +15,7 @@ export interface FkDatepickerConfig {
 }
 
 
-export function fkDatepickerConfigProvider (config: FkDatepickerConfig) {
+export function fkDatePickerConfigProvider (config: FkDatePickerConfig) {
 
     return {
         provide: FK_DATEPICKER_CONFIG,

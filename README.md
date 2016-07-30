@@ -12,10 +12,6 @@ Click [here](http://plnkr.co/edit/ATA8TRRG95mVHof4yntb?p=preview) for a demo.
 npm install angular-fk-datepicker
 ```
 
-## Todo
-
-* Integrate the new `@angular/forms` with `ngModel`.
-
 ## Usage
 
 The library has two main component, the main one is obviously the datepicker itself. The second one is the input of the datepicker.
@@ -81,6 +77,10 @@ The datepicker supports the `formControlName` directive. Just set `formControlNa
 control like any other control. If a value is already present in the control, it will set it as initial value.
 When the value is updated the control is also updated and set to dirty. It is set to `touched` as soon as the datepicker
 is closed.
+
+### NgModel
+
+The datepicker also supports NgModel, which is the alternative to FormControlName.
 
 #### DatePickerCustomClasses
 
@@ -185,10 +185,10 @@ export interface DayLabels {
 
 It's possible since `1.2.0` to configure the datepicker with a global configuration object. 
 
-The configuration interface is FkDatepickerConfig:
+The configuration interface is FkDatePickerConfig:
 
 ```typescript
-export interface FkDatepickerConfig {
+export interface FkDatePickerConfig {
     minDate?: Date;
     maxDate?: Date;
     initialDate?: Date;
@@ -201,19 +201,16 @@ export interface FkDatepickerConfig {
 Example:
 
 ```typescript
-import { FK_DATEPICKER_CONFIG, fkDatepickerConfigProvider } from 'angular-fk-datepicker';
+import { fkDatePickerProviders } from 'angular-fk-datepicker';
 
-//...
-
-@Component({
-    selector: 'my-component',
-    template: '...',
-    providers: [
-        fkDatepickerConfigProvider({
-            initialDate: new Date(2016, 08, 27) // All datepicker that do not override initialDate will have this one
-        })
-    ]
-})
+// The fkDatePickerProviders also includes with the configuration object, the components as platform directives.
+// It will change in rc.5 to NgModule.
+// If you only need to provide a configuration, import fkDatePickerConfigProvider
+bootstrap(AppComponent, [
+    fkDatePickerProviders({
+        initialDate: new Date(2016, 08, 27) // All datepicker that do not override initialDate will have this one
+    })
+]);
 ```
 
 How this works: 
