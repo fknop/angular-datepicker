@@ -36,6 +36,7 @@ import {
 } from './interfaces';
 import { FK_DATEPICKER_CONFIG, FkDatepickerConfig } from './config';
 import { DayComponent } from './day.component';
+import { DateValueAccessor } from './date-value-accessor';
 
 // Styles inspired and modified from https://github.com/winmarkltd/BootstrapFormHelpers
 const BS3_STYLES: string = `
@@ -160,8 +161,7 @@ const TEMPLATE: string = `
 
 
 @Component({
-    selector: 'fk-datepicker,fk-datepicker[formControlName]',
-    // selector: 'fk-datepicker,fk-datepicker[formControlName],fk-datepicker[ngModel]',
+    selector: 'fk-datepicker',
     template: TEMPLATE,
     styles: [BS3_STYLES],
     directives: [DayComponent],
@@ -222,7 +222,6 @@ export class DatePickerComponent implements OnInit {
         @Optional() @Self() private controlName: FormControlName,
         @Optional() @Self() private cd: NgModel
     ) {
-        
         if (this.cd && this.controlName) {
             throw new Error('DatePickerComponent: Cannot have ngModel and formControlName on the same control');
         }

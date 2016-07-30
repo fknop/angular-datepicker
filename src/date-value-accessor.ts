@@ -12,8 +12,7 @@ export const DATE_VALUE_ACCESSOR: any = {
  * It does nothing because there is no native element to write to.
  */
 @Directive({
-  // selector: 'fk-datepicker[formControlName],fk-datepicker[ngModel]',
-  selector: 'fk-datepicker[formControlName]',
+  selector: 'fk-datepicker[formControlName],fk-datepicker[ngModel]',
   providers: [DATE_VALUE_ACCESSOR]
 })
 export class DateValueAccessor implements ControlValueAccessor {
