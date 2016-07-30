@@ -1,6 +1,6 @@
 import { OpaqueToken } from '@angular/core';
 
-import { MonthLabels, DayLabels, FirstDayOfWeek } from './interfaces';
+import { MonthLabels, DayLabels, FirstDayOfWeek, DateFormatter, DatePickerCustomClasses } from './interfaces';
 
 export const FK_DATEPICKER_CONFIG = new OpaqueToken('angular-fk-datepicker');
 
@@ -11,7 +11,8 @@ export interface FkDatePickerConfig {
     monthLabels?: MonthLabels;
     dayLabels?: DayLabels;
     firstDayOfWeek?: FirstDayOfWeek;
-    customClasses?: any; // TODO - change to interface
+    customClasses?: DatePickerCustomClasses; 
+    formatter: DateFormatter;
 }
 
 

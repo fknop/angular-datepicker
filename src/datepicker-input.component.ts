@@ -1,9 +1,7 @@
-import { Component, Input, Output, 
-         OnInit, ContentChild,
-         AfterContentInit } from '@angular/core';
+import { Component, Input, Output, OnInit, Optional, Inject, ContentChild, AfterContentInit } from '@angular/core';
 import { DateFormatter, DefaultDateFormatter } from './interfaces';
 import { DatePickerComponent } from './datepicker.component';
-import { Self, Optional } from '@angular/core';
+import { FK_DATEPICKER_CONFIG, FkDatePickerConfig } from './config';
 
 @Component({
     selector: 'fk-datepicker-input',
@@ -24,6 +22,10 @@ export class DatePickerInputComponent implements OnInit, AfterContentInit {
     @Input() formatter: DateFormatter;
     @Input() customClasses: string = 'form-control';
 
+    constructor(
+        @Optional() @Inject(FK_DATEPICKER_CONFIG) private config: FkDatePickerConfig
+    ) {}
+
     toggle () {
         
         if (this.datepicker.isOpen()) {
@@ -35,6 +37,10 @@ export class DatePickerInputComponent implements OnInit, AfterContentInit {
     }
 
     ngOnInit () {
+        
+        if (this.config) {
+            this.formatter = this.formatter || this.config.formatter;
+        }
         
         this.formatter = this.formatter || new DefaultDateFormatter();
     }

@@ -34,7 +34,7 @@ import {
      MonthLabels,
      mergeCustomClasses
 } from './interfaces';
-import { FK_DATEPICKER_CONFIG, FkDatepickerConfig } from './config';
+import { FK_DATEPICKER_CONFIG, FkDatePickerConfig } from './config';
 import { DayComponent } from './day.component';
 import { DateValueAccessor } from './date-value-accessor';
 
@@ -218,7 +218,7 @@ export class DatePickerComponent implements OnInit {
     get activeDate (): Date { return this._activeDate; }
 
     constructor (
-        @Optional() @Inject(FK_DATEPICKER_CONFIG) private config: FkDatepickerConfig,
+        @Optional() @Inject(FK_DATEPICKER_CONFIG) private config: FkDatePickerConfig,
         @Optional() @Self() private controlName: FormControlName,
         @Optional() @Self() private cd: NgModel
     ) {
