@@ -199,7 +199,34 @@ export interface FkDatePickerConfig {
 }
 ```
 
-Example:
+Example (RC.5)
+
+```typescript
+
+import { NgModule } from '@angular/core';
+import { FkDatePickerModule } from 'angular-fk-datepicker';
+
+@NgModule({
+    imports: [FkDatePickerModule]
+})
+export class ModuleWithoutConfig {}
+
+@NgModule({
+    imports: [
+        FkDatePickerModule.withConfig({
+            initialDate: new Date(2016, 08, 27)
+        });
+    ]
+})
+export class ModuleWithConfig {}
+
+```
+
+If you need to provide a configuration at the component level, you can still use the `fkDatePickerConfigProvider`.
+
+
+
+Example (RC.4 - DEPRECATED - WILL BE REMOVED IN RC.6):
 
 ```typescript
 import { fkDatePickerProviders } from 'angular-fk-datepicker';
