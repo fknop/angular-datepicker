@@ -1,6 +1,6 @@
 import { PLATFORM_DIRECTIVES, NgModule, ModuleWithProviders, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-
 import { fkDatePickerConfigProvider, FkDatePickerConfig } from './config';
+import { DayComponent } from './day.component';
 import { DateValueAccessor } from './date-value-accessor';
 import { DatePickerComponent } from './datepicker.component';
 import { DatePickerInputComponent } from './datepicker-input.component';
@@ -25,7 +25,7 @@ export function fkDatePickerProviders (config?: FkDatePickerConfig) {
                   a configuration object.`);
 
     const providers: any[] = [
-        { provide: PLATFORM_DIRECTIVES, useValue: FK_DATEPICKER_DIRECTIVES, multi: true }
+        { provide: PLATFORM_DIRECTIVES, useValue: [FK_DATEPICKER_DIRECTIVES, DayComponent], multi: true }
     ];
 
     if (config) {
@@ -36,7 +36,7 @@ export function fkDatePickerProviders (config?: FkDatePickerConfig) {
 }
 
 @NgModule({
-    declarations: [FK_DATEPICKER_DIRECTIVES], // Not sure yet if it's really needed for now, will test later
+    declarations: [FK_DATEPICKER_DIRECTIVES, DayComponent], // Not sure yet if it's really needed for now, will test later
     exports: [FK_DATEPICKER_DIRECTIVES],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

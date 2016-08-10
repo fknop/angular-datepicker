@@ -35,7 +35,6 @@ import {
      mergeCustomClasses
 } from './interfaces';
 import { FK_DATEPICKER_CONFIG, FkDatePickerConfig } from './config';
-import { DayComponent } from './day.component';
 import { DateValueAccessor } from './date-value-accessor';
 
 // Styles inspired and modified from https://github.com/winmarkltd/BootstrapFormHelpers
@@ -164,7 +163,6 @@ const TEMPLATE: string = `
     selector: 'fk-datepicker',
     template: TEMPLATE,
     styles: [BS3_STYLES],
-    directives: [DayComponent],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DatePickerComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, Optional, Inject, ContentChild, AfterContentInit } from '@angular/core';
+import { Component, Input, Output, OnInit, Optional, Inject, ContentChild, AfterContentInit, ChangeDetectionStrategy} from '@angular/core';
 import { DateFormatter, DefaultDateFormatter } from './interfaces';
 import { DatePickerComponent } from './datepicker.component';
 import { FK_DATEPICKER_CONFIG, FkDatePickerConfig } from './config';
@@ -13,7 +13,8 @@ import { FK_DATEPICKER_CONFIG, FkDatePickerConfig } from './config';
                [style.background-color]="'inherit'"
                [value]="formatter.format(datepicker.activeDate)" />
         <ng-content></ng-content>
-    `
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DatePickerInputComponent implements OnInit, AfterContentInit {
 
