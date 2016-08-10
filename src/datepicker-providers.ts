@@ -36,6 +36,7 @@ export function fkDatePickerProviders (config?: FkDatePickerConfig) {
 }
 
 @NgModule({
+    declarations: [FK_DATEPICKER_DIRECTIVES],
     exports: [FK_DATEPICKER_DIRECTIVES],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
