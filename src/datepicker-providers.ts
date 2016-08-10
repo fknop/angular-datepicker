@@ -1,4 +1,4 @@
-import { PLATFORM_DIRECTIVES, NgModule, ModuleWithProviders } from '@angular/core';
+import { PLATFORM_DIRECTIVES, NgModule, ModuleWithProviders, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { fkDatePickerConfigProvider, FkDatePickerConfig } from './config';
 import { DateValueAccessor } from './date-value-accessor';
@@ -36,7 +36,8 @@ export function fkDatePickerProviders (config?: FkDatePickerConfig) {
 }
 
 @NgModule({
-    exports: [FK_DATEPICKER_DIRECTIVES]
+    exports: [FK_DATEPICKER_DIRECTIVES],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class FkDatePickerModule {
 
