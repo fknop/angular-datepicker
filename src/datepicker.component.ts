@@ -475,7 +475,7 @@ export class DatePickerComponent implements OnInit {
         }
 
         if (this.hasFormControl()) {
-            this.control.updateValue(this.activeDate);
+            this.control.setValue(this.activeDate);
 
             if (!sameDate(this.initialDate, this.activeDate)) {
                 this.control.markAsDirty();

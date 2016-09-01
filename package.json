@@ -1,6 +1,6 @@
 {
   "name": "angular-fk-datepicker",
-  "version": "1.4.2",
+  "version": "2.0.0",
   "description": "Angular 2 datepicker",
   "main": "dist/index.js",
   "scripts": {
@@ -13,9 +13,9 @@
   "author": "Florian Knop",
   "license": "MIT",
   "devDependencies": {
-    "@angular/core": "^2.0.0-rc.5",
-    "@angular/forms": "^0.3.0",
-    "rxjs": "^5.0.0-beta.6",
+    "@angular/core": "^2.0.0-rc.6",
+    "@angular/forms": "^2.0.0-rc.6",
+    "rxjs": "^5.0.0-beta.11",
     "typescript": "^2.0.0",
     "typings": "^1.3.1"
   },

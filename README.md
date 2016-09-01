@@ -25,18 +25,27 @@ For example, you can pass your own formatter which uses `moment` for advanced fo
 
 By default the style uses `Bootstrap 3`. It supports basic custom classes to apply custom styles. See **DatePickerCustomClasses**.
 
+
 ```typescript
-import { Component } from '@angular/core';
-import { DatePickerComponent, DatePickerInputComponent } from 'angular-fk-datepicker';
+import { NgModule } from '@angular/core';
+import { FkDatePickerModule } from 'angular-fk-datepicker';
 
-...
-@Component({
-    ...
-    directives: [DatePickerComponent, DatePickerInputComponent] // This will probably change in rc.5
+@NgModule({
+    imports: [FkDatePickerModule]
 })
-export class A {}
+export class ModuleWithoutConfig {}
 
+@NgModule({
+    imports: [
+        FkDatePickerModule.withConfig({
+            initialDate: new Date(2016, 08, 27)
+        });
+    ]
+})
+export class ModuleWithConfig {}
 ```
+
+In one of your component:
 
 ```html
 
@@ -199,47 +208,7 @@ export interface FkDatePickerConfig {
 }
 ```
 
-Example (RC.5)
 
-```typescript
-
-import { NgModule } from '@angular/core';
-import { FkDatePickerModule } from 'angular-fk-datepicker';
-
-@NgModule({
-    imports: [FkDatePickerModule]
-})
-export class ModuleWithoutConfig {}
-
-@NgModule({
-    imports: [
-        FkDatePickerModule.withConfig({
-            initialDate: new Date(2016, 08, 27)
-        });
-    ]
-})
-export class ModuleWithConfig {}
-
-```
-
-If you need to provide a configuration at the component level, you can still use the `fkDatePickerConfigProvider`.
-
-
-
-Example (RC.4 - DEPRECATED - WILL BE REMOVED IN RC.6):
-
-```typescript
-import { fkDatePickerProviders } from 'angular-fk-datepicker';
-
-// The fkDatePickerProviders also includes with the configuration object, the components as platform directives.
-// It will change in rc.5 to NgModule.
-// If you only need to provide a configuration, import fkDatePickerConfigProvider
-bootstrap(AppComponent, [
-    fkDatePickerProviders({
-        initialDate: new Date(2016, 08, 27) // All datepicker that do not override initialDate will have this one
-    })
-]);
-```
 
 How this works: 
 

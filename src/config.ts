@@ -16,7 +16,7 @@ export interface FkDatePickerConfig {
 }
 
 
-export function fkDatePickerConfigProvider (config: FkDatePickerConfig) {
+export function fkDatePickerConfigProvider (config: FkDatePickerConfig): any {
 
     return {
         provide: FK_DATEPICKER_CONFIG,
